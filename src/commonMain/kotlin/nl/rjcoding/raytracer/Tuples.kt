@@ -15,6 +15,7 @@ fun point(x: Double, y: Double, z: Double): Tuple = tuple(x, y, z, 1.0)
 fun point(x: Int, y: Int, z: Int): Tuple = tuple(x, y, z, 1)
 
 fun color(r: Double, g: Double, b: Double): Tuple = tuple(r, g, b)
+fun color(r: Int, g: Int, b: Int): Tuple = tuple(r, g, b)
 
 inline val Tuple.isVector: Boolean get() = this.size == 4 && eq(this[3], 0.0)
 inline val Tuple.isPoint: Boolean get() = this.size == 4 && eq(this[3], 1.0)

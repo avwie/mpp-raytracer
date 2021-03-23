@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.4.20"
+    kotlin("multiplatform") version "1.4.31"
 }
 group = "nl.rjcoding"
 version = "1.0-SNAPSHOT"
@@ -10,16 +10,13 @@ repositories {
 kotlin {
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "12"
+            kotlinOptions.jvmTarget = "15"
         }
     }
-    js {
+    js(IR) {
         browser {
             testTask {
-                useKarma {
-                    useChromeHeadless()
-                    webpackConfig.cssSupport.enabled = true
-                }
+                useMocha()
             }
         }
     }
