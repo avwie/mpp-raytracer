@@ -10,12 +10,12 @@ inline class Matrix(val data: DoubleArray) {
 
     fun row(row: Int): Tuple {
         val indices = (row * cols) until (row + 1) * cols
-        return data.sliceArray(indices.map { it + 2 })
+        return Tuple(data.sliceArray(indices.map { it + 2 }))
     }
 
     fun col(col: Int): Tuple {
         val indices = col until (rows * cols) step cols
-        return data.sliceArray(indices.map { it + 2 })
+        return Tuple(data.sliceArray(indices.map { it + 2 }))
     }
 
     operator fun times(other: Matrix): Matrix {
@@ -23,20 +23,20 @@ inline class Matrix(val data: DoubleArray) {
         val result = Matrix(rows, cols)
         (0 until rows).forEach { r ->
             (0 until other.cols).forEach { c ->
-                result[r, c] = dot(row(r), other.col(c))
+                result[r, c] = row(r) dot other.col(c)
             }
         }
         return result
     }
 
     operator fun times(tuple: Tuple): Tuple {
-        val other = Matrix(tuple.size, 1, *tuple)
+        val other = Matrix(tuple.size, 1, *tuple.data)
         return times(other).col(0)
     }
 
     infix fun eq(other: Matrix): Boolean {
         if (data.size != other.data.size) return false
-        return (0 until data.size).all { i -> data[i] == other.data[i] }
+        return (data.indices).all { i -> RayTracerEnvironment.eq(data[i], other.data[i]) }
     }
 
     companion object {

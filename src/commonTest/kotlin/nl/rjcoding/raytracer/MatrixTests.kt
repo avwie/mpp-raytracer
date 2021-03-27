@@ -15,8 +15,8 @@ class MatrixTests {
         assertEquals(13.5, m[3, 0])
         assertEquals(15.5, m[3, 2])
 
-        assertTrue { eq(tuple(5.5, 6.5, 7.5, 8.5), m.row(1)) }
-        assertTrue { eq(tuple(2.0, 6.5, 10.0, 14.5), m.col(1)) }
+        assertTrue { tuple(5.5, 6.5, 7.5, 8.5) eq m.row(1) }
+        assertTrue { tuple(2.0, 6.5, 10.0, 14.5) eq m.col(1) }
     }
 
     @Test
@@ -55,7 +55,7 @@ class MatrixTests {
         val t = tuple(1, 2, 3, 1)
         val result = m1 * t
         val expected = tuple(18, 24, 33, 1)
-        assertTrue { eq(expected, result) }
+        assertTrue { expected eq result }
     }
 
     @Test
@@ -64,6 +64,6 @@ class MatrixTests {
         val t = tuple(1, 2, 3, 1)
         val i4 = Matrix.identity(4)
         assertTrue { m1 eq m1 * i4 }
-        assertTrue { eq(t, i4 * t) }
+        assertTrue { t eq i4 * t }
     }
 }

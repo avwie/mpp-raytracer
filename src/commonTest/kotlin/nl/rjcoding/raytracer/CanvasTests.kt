@@ -16,7 +16,7 @@ abstract class CanvasTests {
 
         val pixels = canvas.pixels().toList()
         assertEquals(200, pixels.size)
-        assertTrue { pixels.all { eq(it, color(0, 0, 0)) } }
+        assertTrue { pixels.all { it eq color(0, 0, 0)  } }
     }
 
     @Test
@@ -24,7 +24,7 @@ abstract class CanvasTests {
         val canvas = provideCanvas(10, 20)
         val red = color(1, 0, 0)
         canvas.setPixel(2, 3, red)
-        assertTrue { eq(red, canvas.getPixel(2, 3)) }
+        assertTrue { red eq canvas.getPixel(2, 3) }
     }
 
     @Test

@@ -36,7 +36,7 @@ fun Canvas.save(appendable: Appendable) = appendable.run {
         }
         line = y
 
-        pixel.forEach { f ->
+        pixel.data.forEach { f ->
             val i = (f * 255).roundToInt().coerceIn(0, 255).toString()
             if (currentLine.length + 1 + i.length > 70) {
                 appendLine(currentLine.trimEnd())
@@ -59,13 +59,13 @@ class ArrayCanvas(override val width: Int, override val height: Int) : Canvas {
 
     override fun getPixel(x: Int, y: Int): Tuple {
         val startIndex = posToIndex(x, y)
-        return data.sliceArray(startIndex until startIndex + 3)
+        return Tuple(data.sliceArray(startIndex until startIndex + 3))
     }
 
     override fun setPixel(x: Int, y: Int, color: Tuple) {
         val startIndex = posToIndex(x, y)
         (0 until 3).forEach { i ->
-            data[startIndex + i] = color[i]
+            data[startIndex + i] = color.data[i]
         }
     }
 
