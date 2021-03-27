@@ -1,15 +1,21 @@
 package nl.rjcoding.raytracer
 
-data class Matrix(val rows: Int, val cols: Int) {
-    private val data = DoubleArray(rows * cols)
-    
-    operator fun set(row: Int, col: Int, value: Double) { data[row * cols  + col] = value }
-    operator fun get(row: Int, col: Int): Double = data[row * cols + col]
+inline class Matrix(val data: DoubleArray) {
 
-    fun row(row: Int): Tuple = data.sliceArray(row * cols until (row + 1) * cols)
+    val rows get() = data[0].toInt()
+    val cols get() = data[1].toInt()
+
+    operator fun set(row: Int, col: Int, value: Double) { data[row * cols  + col + 2] = value }
+    operator fun get(row: Int, col: Int): Double = data[row * cols + col + 2]
+
+    fun row(row: Int): Tuple {
+        val indices = (row * cols) until (row + 1) * cols
+        return data.sliceArray(indices.map { it + 2 })
+    }
+
     fun col(col: Int): Tuple {
-        val i = (col until (rows * cols) step cols).toList()
-        return data.sliceArray(i)
+        val indices = col until (rows * cols) step cols
+        return data.sliceArray(indices.map { it + 2 })
     }
 
     operator fun times(other: Matrix): Matrix {
@@ -28,17 +34,25 @@ data class Matrix(val rows: Int, val cols: Int) {
         return times(other).col(0)
     }
 
+    infix fun eq(other: Matrix): Boolean {
+        if (data.size != other.data.size) return false
+        return (0 until data.size).all { i -> data[i] == other.data[i] }
+    }
+
     companion object {
-        operator fun invoke(rows: Int, cols: Int, vararg values: Double): Matrix = Matrix(rows, cols).apply {
-            values.forEachIndexed { i, d ->
-                this[i / 4, i % 4] = d
-            }
+        operator fun invoke(rows: Int, cols: Int): Matrix {
+            val data = DoubleArray(rows * cols + 2)
+            data[0] = rows.toDouble()
+            data[1] = cols.toDouble()
+            return Matrix(data)
         }
 
-        operator fun invoke(rows: Int, cols: Int, vararg values: Int): Matrix = Matrix(rows, cols).apply {
-            values.forEachIndexed { i, d ->
-                this[i / 4, i % 4] = d.toDouble()
-            }
+        operator fun invoke(rows: Int, cols: Int, vararg values: Double): Matrix = Matrix(rows, cols).also {
+            values.forEachIndexed { i, d -> it.data[i + 2] = d }
+        }
+
+        operator fun invoke(rows: Int, cols: Int, vararg values: Int): Matrix = Matrix(rows, cols).also {
+            values.forEachIndexed { i, d -> it.data[i + 2] = d.toDouble() }
         }
 
         fun identity(dim: Int) = Matrix(dim, dim).apply {
