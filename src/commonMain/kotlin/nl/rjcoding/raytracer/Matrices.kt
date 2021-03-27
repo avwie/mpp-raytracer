@@ -18,6 +18,14 @@ inline class Matrix(val data: DoubleArray) {
         return Tuple(data.sliceArray(indices.map { it + 2 }))
     }
 
+    fun transpose(): Matrix = Matrix(cols, rows).also { transposed ->
+        (0 until rows).forEach { r ->
+            (0 until cols).forEach { c ->
+                transposed[c, r] = get(r, c)
+            }
+        }
+    }
+
     operator fun times(other: Matrix): Matrix {
         require(cols == other.rows)
         val result = Matrix(rows, cols)
