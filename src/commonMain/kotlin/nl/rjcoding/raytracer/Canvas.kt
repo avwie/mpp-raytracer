@@ -8,6 +8,8 @@ interface Canvas {
 
     fun getPixel(x: Int, y: Int): Tuple
     fun setPixel(x: Int, y: Int, color: Tuple)
+
+    operator fun get(x: Int, y: Int): Tuple = getPixel(x, y)
 }
 
 fun Canvas.pixelsWithPosition(): Sequence<Triple<Int, Int, Tuple>> = sequence {
